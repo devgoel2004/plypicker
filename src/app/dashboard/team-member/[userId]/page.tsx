@@ -30,7 +30,8 @@ export default function Team({
     }
   };
   const navigateProducts = () => {
-    router.push(`/dashboard/admin/product`);
+    console.log("hello");
+    router.push(`/products`);
   };
   const handleLogout = async () => {
     try {
@@ -74,11 +75,6 @@ export default function Team({
               onClick={navigateProducts}
               className="bg-green-500  py-2 px-4 rounded-lg text-white mt-2 w-full">
               Products
-            </button>
-            <button
-              className="bg-blue-500  py-2 px-4 rounded-lg text-white mt-2 w-full"
-              onClick={navigateRequests}>
-              Requests
             </button>
           </div>
         </div>

@@ -16,14 +16,15 @@ export default function Login() {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/login", user);
+      console.log(response);
       if (response.data.status === 400) {
         alert(response.data.error);
       } else {
         alert("Login Success");
         if (response.data.user.role === "admin") {
-          router.push(`/profile`);
+          router.push(`/dashboard/admin/${response.data.user._id}`);
         } else {
-          router.push(`/profile`);
+          router.push(`/dashboard/team-member/${response.data.user._id}`);
         }
       }
     } catch (error: any) {

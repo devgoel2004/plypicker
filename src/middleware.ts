@@ -26,9 +26,7 @@ export async function middleware(request: NextRequest) {
     const decodedToken = JSON.parse(jsonPayload);
     const id = decodedToken.id;
   }
-  if (isPublicPath && token) {
-    return NextResponse.redirect(new URL("/", request.nextUrl));
-  }
+
   if (!isPublicPath && !token) {
     return NextResponse.redirect(new URL("/login", request.nextUrl));
   }

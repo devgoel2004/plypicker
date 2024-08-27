@@ -15,9 +15,10 @@ export async function POST(request: NextRequest) {
       department,
       productId,
       requestedBy,
+      
     } = reqBody;
     const user = await User.findById(requestedBy);
-    const email = user.email;
+    const username = user.username;
     const updateRequest = new Request({
       productId,
       productName,
@@ -26,7 +27,7 @@ export async function POST(request: NextRequest) {
       image,
       department,
       requestedBy,
-      email,
+      username,
     });
     const updatedRequest = await updateRequest.save();
     console.log(updatedRequest);

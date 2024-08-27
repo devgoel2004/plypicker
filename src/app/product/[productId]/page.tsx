@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 export default function ProductDetails({
   params,
@@ -8,6 +9,7 @@ export default function ProductDetails({
     productId: string;
   };
 }) {
+  const router = useRouter();
   const id = params.productId;
   const [productDetail, setProductDetail] = useState({
     productName: "",
@@ -17,6 +19,9 @@ export default function ProductDetails({
     department: "",
     id: "",
   });
+  const navigate = () => {
+    router.push(`/dashboard/team-member/product/${id}`);
+  };
   const getProductDetails = async () => {
     try {
       const response = await axios.get(
@@ -58,7 +63,9 @@ export default function ProductDetails({
             {productDetail.productDescription}
           </p>
           <p className="text-md font-semibold mb-6">${productDetail.price}</p>
-          <button className="bg-blue-500 text-white py-3 px-5 rounded-lg hover:bg-blue-600 transition duration-300 mb-6">
+          <button
+            onClick={navigate}
+            className="bg-blue-500 text-white py-3 px-5 rounded-lg hover:bg-blue-600 transition duration-300 mb-6">
             Update Product
           </button>
         </div>

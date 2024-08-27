@@ -72,7 +72,7 @@ export default function ProductDetails({
 
   const sentRequest = async () => {
     try {
-      const response = await axios.post(`/api/products/team-member/${userId}`, {
+      const response = await axios.post(`/api/products/team-member`, {
         productName,
         price,
         image,

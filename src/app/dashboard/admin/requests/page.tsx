@@ -1,12 +1,8 @@
 "use client";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 export default function Requests() {
-  const router = useRouter();
-  const [requestId, setRequestId] = useState("");
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("");
   const [requests, setRequests] = useState([]);
   const getallRequests = async () => {
     try {
@@ -15,33 +11,6 @@ export default function Requests() {
     } catch (error: any) {
       console.log(error);
     }
-  };
-  const approveRequest = async () => {
-    try {
-      const response = await axios.put(`/api/products/admin`, {
-        requestId,
-        status: "Approved",
-      });
-      console.log(response);
-      alert(`Approved ${requestId}`);
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
-  const rejectRequest = async () => {
-    try {
-      const response = await axios.put(`/api/products/admin`, {
-        requestId,
-        status: "Rejected",
-      });
-      console.log(response);
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
-
-  const goToDetails = () => {
-    router.push(`/dashboard/admin/requests/${requestId}`);
   };
   useEffect(() => {
     getallRequests();
@@ -53,7 +22,6 @@ export default function Requests() {
           <h1 className="text-3xl font-semibold text-gray-800 mb-10 text-center">
             Team Member Requests
           </h1>
-
           <div className="bg-white shadow-md rounded-lg overflow-hidden">
             <table className="min-w-full bg-white">
               <thead>
@@ -70,77 +38,39 @@ export default function Requests() {
                   <th className="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">
-                    Actions
-                  </th>
                 </tr>
               </thead>
               <tbody>
                 {requests &&
-                  requests.map((request) => (
+                  requests.map((request: any) => (
                     <>
                       <tr>
                         <td className="py-4 px-4 border-b border-gray-200 text-sm">
-                          REQ12345
+                          {request._id}
+                        </td>
+                        <td className="py-4 px-4 border-b border-gray-200 text-sm capitalize">
+                          {request.username}
                         </td>
                         <td className="py-4 px-4 border-b border-gray-200 text-sm">
-                          {request.productName}
-                        </td>
-                        <td className="py-4 px-4 border-b border-gray-200 text-sm">
-                          <button
-                            onClick={goToDetails}
+                          <Link
+                            href={`/dashboard/admin/requests/${request._id}`}
                             className="bg-blue-500 text-white px-3 py-1 rounded mr-2">
                             Details
-                          </button>
+                          </Link>
                         </td>
-                        <td className="py-4 px-4 border-b border-gray-200 text-sm text-yellow-600">
-                          Pending
-                        </td>
-                        <td className="py-4 px-4 border-b border-gray-200 text-sm">
-                          <button
-                            onClick={approveRequest}
-                            className="bg-green-500 text-white px-3 py-1 rounded mr-2">
-                            Approve
-                          </button>
-                          <button
-                            onClick={rejectRequest}
-                            className="bg-red-500 text-white px-5 py-1 rounded mt-2">
-                            Reject
-                          </button>
+                        <td
+                          className={`py-4 px-4 border-b border-gray-200 text-sm ${
+                            request.status === "Pending"
+                              ? "text-yellow-500"
+                              : ""
+                          }
+            ${request.status === "Approved" ? "text-green-500" : ""}
+            ${request.status === "Rejected" ? "text-red-500" : ""} `}>
+                          {request.status}
                         </td>
                       </tr>
                     </>
                   ))}
-                <tr>
-                  <td className="py-4 px-4 border-b border-gray-200 text-sm">
-                    REQ12345
-                  </td>
-                  <td className="py-4 px-4 border-b border-gray-200 text-sm">
-                    John Doe
-                  </td>
-                  <td className="py-4 px-4 border-b border-gray-200 text-sm">
-                    <button
-                      onClick={goToDetails}
-                      className="bg-blue-500 text-white px-3 py-1 rounded mr-2">
-                      Details
-                    </button>
-                  </td>
-                  <td className="py-4 px-4 border-b border-gray-200 text-sm text-yellow-600">
-                    Pending
-                  </td>
-                  <td className="py-4 px-4 border-b border-gray-200 text-sm">
-                    <button
-                      onClick={approveRequest}
-                      className="bg-green-500 text-white px-3 py-1 rounded mr-2">
-                      Approve
-                    </button>
-                    <button
-                      onClick={rejectRequest}
-                      className="bg-red-500 text-white px-5 py-1 rounded mt-2">
-                      Reject
-                    </button>
-                  </td>
-                </tr>
               </tbody>
             </table>
           </div>

@@ -11,36 +11,26 @@ export async function PUT(request: NextRequest) {
         error: "message not found",
       });
     }
+    console.log(requestId);
     if (status === "Approved") {
-      const updatedRequest = await Request.findByIdAndUpdate(
-        { requestId },
-        {
-          status: "Approved",
-        }
-      );
+      const updatedRequest = await Request.findByIdAndUpdate(requestId, {
+        status: "Approved",
+      });
       return NextResponse.json({
         status: 200,
         updatedRequest,
         message: "Your request has been accepted",
       });
-    }
-    if (status === "Rejected") {
-      const updatedRequest = await Request.findByIdAndUpdate(
-        { requestId },
-        {
-          status: "Rejected",
-        }
-      );
+    } else if (status === "Rejected") {
+      const updatedRequest = await Request.findByIdAndUpdate(requestId, {
+        status: "Rejected",
+      });
       return NextResponse.json({
         status: 200,
         updatedRequest,
         message: "Your request has been rejected",
       });
     }
-    return NextResponse.json({
-      status: 200,
-      updateRequest,
-    });
   } catch (error: any) {
     console.log(error);
     return NextResponse.json({
