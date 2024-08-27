@@ -10,7 +10,6 @@ export default function Profile() {
   const [setLoading, setSetLoading] = useState(true);
   const fetchProfile = async () => {
     try {
-      const id = getDataFromToken();
       const response = await axios.post("/api/users/me", { id });
       if (response.data.status !== 200) {
         alert(response.data.error);
