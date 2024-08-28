@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { getDataFromToken } from "@/helpers/getDataFromToken";
 export default function Profile() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -10,7 +9,7 @@ export default function Profile() {
   const [setLoading, setSetLoading] = useState(true);
   const fetchProfile = async () => {
     try {
-      const response = await axios.post("/api/users/me", { id });
+      const response = await axios.post("/api/users/me");
       if (response.data.status !== 200) {
         alert(response.data.error);
       } else {
