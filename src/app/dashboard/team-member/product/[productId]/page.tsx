@@ -87,6 +87,13 @@ export default function ProductDetails({
       alert("Something went wrong");
     }
   };
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files?.length > 0) {
+      const file = files[0];
+      setImageUpload(file);
+    }
+  };
   useEffect(() => {
     getProductDetails();
     getUserId();
@@ -119,10 +126,7 @@ export default function ProductDetails({
             className="block text-md font-medium text-gray-700">
             Image
           </label>
-          <input
-            type="file"
-            onChange={(e) => setImageUpload(e.target.files[0])}
-          />
+          <input type="file" onChange={handleFileChange} />
           <button onClick={uploadImage} className="bg-blue-500 p-2 text-white ">
             Upload Image
           </button>
