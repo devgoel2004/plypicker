@@ -22,15 +22,16 @@ export default function ProductDetails({
   const [department, setDepartment] = useState("");
   const [imageUpload, setImageUpload] = useState<File | null>(null);
   const [userId, setUserId] = useState("");
+  const [loading, setLoading] = useState(true);
   const getUserId = async () => {
     try {
+      setLoading(true);
       const response = await axios.get("/api/users/me");
       setUserId(response.data.user._id);
-      console.log(userId);
-      console.log(response);
     } catch (error: any) {
-      console.log(error);
       alert("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
   const uploadImage = () => {
@@ -43,18 +44,17 @@ export default function ProductDetails({
         .then((snapshot) => {
           getDownloadURL(snapshot.ref).then((url) => {
             setImage(url);
-            console.log(url);
           });
           alert("Image uploaded");
         })
         .catch((error: any) => {
           alert("something went wrong");
-          console.log(error);
         });
     }
   };
   const getProductDetails = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
         `https://64e0caef50713530432cafa1.mockapi.io/api/products/${id}`
       );
@@ -65,8 +65,9 @@ export default function ProductDetails({
       setProductDescription(product.productDescription);
       setDepartment(product.department);
     } catch (error: any) {
-      console.log(error);
       alert(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,7 +85,6 @@ export default function ProductDetails({
       alert("Request sent successfully");
     } catch (error: any) {
       alert("Something went wrong");
-      console.log(error);
     }
   };
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function ProductDetails({
         <div className="p-2 mt-2">
           <label
             htmlFor="name"
-            className="block text-sm font-medium text-gray-700">
+            className="block text-md font-medium text-gray-700">
             Product Name
           </label>
           <input
@@ -110,13 +110,13 @@ export default function ProductDetails({
             id="name"
             name="name"
             placeholder="Enter product name"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 block p-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div className="p-2 mt-2">
           <label
             htmlFor="image"
-            className="block text-sm font-medium text-gray-700">
+            className="block text-md font-medium text-gray-700">
             Image
           </label>
           <input
@@ -126,12 +126,12 @@ export default function ProductDetails({
           <button onClick={uploadImage} className="bg-blue-500 p-2 text-white ">
             Upload Image
           </button>
-          <img src={image} alt="" />
+          <img src={image} alt="" className="p-2" />
         </div>
         <div className="p-2 mt-2">
           <label
             htmlFor="price"
-            className="block text-sm font-medium text-gray-700">
+            className="block text-md font-medium text-gray-700">
             Price
           </label>
           <input
@@ -141,13 +141,13 @@ export default function ProductDetails({
             onChange={(e) => setPrice(e.target.value)}
             name="price"
             placeholder="Enter product price"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 block p-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div className="p-2 mt-2">
           <label
             htmlFor="department"
-            className="block text-sm font-medium text-gray-700">
+            className="block text-md font-medium text-gray-700">
             Department
           </label>
           <input
@@ -157,13 +157,13 @@ export default function ProductDetails({
             id="department"
             name="department"
             placeholder="Enter product department"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 block p-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div className="p-2 mt-2">
           <label
             htmlFor="description"
-            className="block text-sm font-medium text-gray-700">
+            className="block text-md font-medium text-gray-700">
             Description
           </label>
           <textarea
@@ -172,7 +172,7 @@ export default function ProductDetails({
             id="description"
             name="description"
             placeholder="Enter product description"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+            className="mt-1 block p-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
         </div>
         <div>
           <button

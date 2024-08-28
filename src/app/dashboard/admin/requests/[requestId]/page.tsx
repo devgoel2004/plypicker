@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { FaSpinner } from "react-icons/fa";
 export default function RequestDetails({
   params,
 }: {
@@ -8,12 +9,7 @@ export default function RequestDetails({
     requestId: String;
   };
 }) {
-  const [request, setRequest] = useState({
-    productName: "",
-    image: "",
-    productDescription: "",
-    department: "",
-  });
+  const [loading, setLoading] = useState(true);
   const [productName, setProductName] = useState("");
   const [image, setImage] = useState("");
   const [productDescription, setProductDescription] = useState("");
@@ -23,6 +19,7 @@ export default function RequestDetails({
   const [status, setStatus] = useState("Pending");
   const approveRequest = async () => {
     try {
+      setLoading(true);
       const status = "Approved";
       const id = params.requestId;
       const response = await axios.put(`/api/products/admin`, {
@@ -42,10 +39,13 @@ export default function RequestDetails({
       alert("Approved");
     } catch (error) {
       alert("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
   const rejectRequest = async () => {
     try {
+      setLoading(true);
       const status = "Rejected";
       const id = params.requestId;
       const response = await axios.put(`/api/products/admin`, {
@@ -55,14 +55,16 @@ export default function RequestDetails({
       alert("Rejected");
     } catch (error) {
       alert("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
   const id = params.requestId;
   const getRequestDetails = async () => {
     try {
+      setLoading(true);
       const response = await axios.post(`/api/products/admin/request`, { id });
       const request = response.data.requests;
-      console.log(request);
       setProductName(request.productName);
       setImage(request.image);
       setPrice(request.price);
@@ -70,9 +72,10 @@ export default function RequestDetails({
       setDepartment(request.department);
       setProductId(request.productId);
       setStatus(request.status);
-      console.log(response);
     } catch (error) {
-      console.log(error);
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -80,41 +83,69 @@ export default function RequestDetails({
   }, []);
   return (
     <>
-      <div className="min-h-screen bg-gray-100 p-8">
-        <h1 className="text-3xl font-bold text-center mb-8">Request Details</h1>
-        <div className="space-y-6">
-          <div className="flex-shrink-0">
-            <img
-              src={image}
-              alt={productName}
-              className="w-24 h-24 object-cover rounded-lg"
-            />
+      {loading ? (
+        <>
+          <div className="min-h-10  align-middle justify-center">
+            <h1 className="text-3xl mt-5 font-semibold text-gray-800 mb-10 text-center">
+              Request Details
+            </h1>
+            <br />
+            <div className="flex justify-center">
+              <FaSpinner className="min-h-full text-4xl text-gray-500 animate-spin-slow" />
+            </div>
           </div>
-          <div className="flex-grow">
-            <h2 className="text-xl font-semibold">{productName}</h2>
-            <p className="text-gray-700">{productDescription}</p>
-            <p className="text-gray-500 text-sm">Department: {department}</p>
-          </div>
-          <div
-            className={`flex space-x-3 ${
-              status === "Pending" ? "text-yellow-500" : ""
-            }
+        </>
+      ) : (
+        <>
+          <div className="min-h-screen bg-gray-100 p-8">
+            <h1 className="text-3xl font-bold text-center mb-8">
+              Request Details
+            </h1>
+            <div className="flex justify-center  align-center">
+              <div className="space-y-6">
+                <div className="flex-shrink-0">
+                  <img
+                    src={image}
+                    alt={productName}
+                    className="w-30 h-30 object-cover rounded-lg"
+                  />
+                </div>
+                <div className="flex-grow">
+                  <h2 className="text-xl font-semibold">
+                    Product Name: {productName}
+                  </h2>
+                  <p className="text-gray-700">
+                    Description: {productDescription}
+                  </p>
+                  <p className="text-gray-500 text-sm">
+                    Department: {department}
+                  </p>
+                </div>
+                <div>
+                  <p
+                    className={`flex space-x-3 ${
+                      status === "Pending" ? "text-yellow-500" : ""
+                    }
             ${status === "Approved" ? "text-green-500" : ""}
             ${status === "Rejected" ? "text-red-500" : ""}`}>
-            <p>{status}</p>
-            <button
-              onClick={approveRequest}
-              className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">
-              Approve
-            </button>
-            <button
-              onClick={rejectRequest}
-              className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">
-              Reject
-            </button>
+                    {status}
+                  </p>
+                  <button
+                    onClick={approveRequest}
+                    className="bg-green-500 mr-3 text-white py-2 px-4 rounded-lg hover:bg-green-600">
+                    Approve
+                  </button>
+                  <button
+                    onClick={rejectRequest}
+                    className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">
+                    Reject
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 }

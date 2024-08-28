@@ -13,7 +13,6 @@ export default function Team({
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [setLoading, setSetLoading] = useState(true);
-
   const fetchProfile = async () => {
     try {
       const response = await axios.get("/api/users/me");
@@ -25,7 +24,6 @@ export default function Team({
         setEmail(user.email);
       }
     } catch (error: any) {
-      console.log(error);
       alert(error.message);
     }
   };
@@ -59,7 +57,7 @@ export default function Team({
             <h2 className="text-xl font-semibold mb-4 text-center">
               {setLoading ? "Processing" : "User Profile"}
             </h2>
-            <div className="mb-2">
+            <div className="mb-2 capitalize">
               <span className="font-bold capitalize">Role:</span> {role}
             </div>
             <div className="mb-4">

@@ -1,10 +1,9 @@
 "use client";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+
 import Link from "next/link";
 export default function Products() {
-  const router = useRouter();
   const [loading, setloading] = useState(true);
   const [products, setProducts] = useState([]);
   const getProducts = async () => {
@@ -12,7 +11,6 @@ export default function Products() {
       "https://64e0caef50713530432cafa1.mockapi.io/api/products"
     );
     setProducts(response.data);
-    console.log(response.data);
   };
   useEffect(() => {
     getProducts();

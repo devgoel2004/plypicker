@@ -15,7 +15,6 @@ export default function VerifyEmailPage() {
       setVerified(true);
     } catch (error: any) {
       setError(error);
-      console.log(error);
     }
   };
   useEffect(() => {
@@ -48,7 +47,7 @@ export default function VerifyEmailPage() {
             </h6>
             <div className="flex justify-center ">
               <Link
-                className="bg-slate-500 p-2 text-white rounded-md mt-1"
+                className="bg-slate-500 px-4 p-2 text-white rounded-md mt-1"
                 href="/login">
                 Login
               </Link>

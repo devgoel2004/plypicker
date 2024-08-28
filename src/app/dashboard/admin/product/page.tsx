@@ -2,55 +2,78 @@
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { FaSpinner } from "react-icons/fa";
 import Link from "next/link";
 export default function Team() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const getProducts = async () => {
-    const response = await axios.get(
-      "https://64e0caef50713530432cafa1.mockapi.io/api/products"
-    );
-    setProducts(response.data);
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        "https://64e0caef50713530432cafa1.mockapi.io/api/products"
+      );
+      setProducts(response.data);
+    } catch (error) {
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   };
   useEffect(() => {
     getProducts();
   }, []);
   return (
     <>
-      <>
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold text-center mb-8">Products</h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map((product: any) => (
-              <div
-                key={product.id}
-                className="bg-white shadow-lg rounded-lg overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.productName}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-4">
-                  <h2 className="text-md font-bold mb-2">
-                    {product.productName}
-                  </h2>
-                  <p className="text-gray-700 mb-4 text-sm">
-                    {product.productDescription}
-                  </p>
-                  <p className=" font-semibold text-sm">${product.price}</p>
-                  <p className="text-sm font-semibold mb-2">
-                    {product.department}
-                  </p>
-                  <Link
-                    className="text-sm  bg-green-500 p-2  text-white"
-                    href={`/dashboard/admin/product/${product.id}`}>
-                    Details
-                  </Link>
-                </div>
-              </div>
-            ))}
+      {loading ? (
+        <>
+          <div className="min-h-10  align-middle justify-center">
+            <h1 className="text-3xl mt-5 font-semibold text-gray-800 mb-10 text-center">
+              Products
+            </h1>
+            <br />
+            <div className="flex justify-center">
+              <FaSpinner className="min-h-full text-4xl text-gray-500 animate-spin-slow" />
+            </div>
           </div>
-        </div>
-      </>
+        </>
+      ) : (
+        <>
+          <div className="container mx-auto px-4 py-8">
+            <h1 className="text-3xl font-bold text-center mb-8">Products</h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {products.map((product: any) => (
+                <div
+                  key={product.id}
+                  className="bg-white shadow-lg rounded-lg overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.productName}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <h2 className="text-md font-bold mb-2">
+                      {product.productName}
+                    </h2>
+                    <p className="text-gray-700 mb-4 text-sm">
+                      {product.productDescription}
+                    </p>
+                    <p className=" font-semibold text-sm">${product.price}</p>
+                    <p className="text-sm font-semibold mb-2">
+                      {product.department}
+                    </p>
+                    <Link
+                      className="text-sm  bg-green-500 p-2  text-white"
+                      href={`/dashboard/admin/product/${product.id}`}>
+                      Details
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import User from "./models/userModel";
-import axios from "axios";
-// import jwt from "jsonwebtoken";
-import { getDataFromToken } from "./helpers/getDataFromToken";
+
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isPublicPath =
     path === "/login" ||
     path === "/signup" ||
     path === "/product/:path*" ||
-    path === "/products";
+    path === "/products" ||
+    path === "/product/:path*" ||
+    path === "/dashboard" ||
+    path === "/dashboard/:path*";
   const token = request.cookies.get("token")?.value || "";
   const base64Url = token.split(".")[1];
   if (base64Url) {
@@ -42,5 +42,7 @@ export const config = {
     "/product/:path*",
     "/pending-requests",
     "/pending-requests/:path*",
+    "/dashboard/:path*",
+    "/dashboard/:path*",
   ],
 };
